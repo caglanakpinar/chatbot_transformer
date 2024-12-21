@@ -180,5 +180,3 @@ class PositionalEncoding(tf.keras.layers.Layer):
 
     def call(self, inputs):
         return inputs + self.pos_encoding[:, : tf.shape(inputs)[1], :]
-
-

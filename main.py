@@ -44,3 +44,4 @@ p = Predict(
 )
 
 print(p.predict("where have you been?"))
+print(p.predict("how are you?"))

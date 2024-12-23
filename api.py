@@ -52,8 +52,11 @@ class BaseServe:
             with open(f, "r")as _f:
                 _data = _f.readlines()
             lines += _data
+        _f.close()
         with open(Paths.data_path / f"{date}.txt", "w") as file:
-            file.write(lines)
+            for l in lines:
+                file.write('%s\n' % l)
+        file.close()
 
     def init_api(self):
         app = Flask(__name__)
@@ -78,13 +81,14 @@ class BaseServe:
 
         @app.route("/files")
         def get_files():
+            print("yesss")
             params = json.loads(request.data)
             thr = threading.Thread(target=read_write, daemon=True, kwargs=params)
             thr.daemon = True
             thr.start()
             return {"output": "files created"}
 
-        return app.run(threaded=False, debug=False, port=self.port, host=self.host)
+        return app.run(threaded=False, debug=True, port=self.port, host=self.host)
 
     def serve(self, inputs):
         return {"output": self.predict.predict(inputs['prompt'])}

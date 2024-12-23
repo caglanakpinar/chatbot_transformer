@@ -82,8 +82,6 @@ def load_conversations(
                 return inputs, outputs, inputs, outputs
 
     core_inputs, core_outputs = inputs, outputs
-    inputs += data.commonsense.question.tolist()
-    outputs += data.commonsense.question_concept.tolist()
 
     for i in data.text['rows']:
         for l in i['row']['messages']:
@@ -91,8 +89,14 @@ def load_conversations(
                 inputs.append(l['content'])
             else:
                 outputs.append(l['content'])
-    print(len(inputs), len(outputs))
-    return core_inputs, core_outputs, core_inputs, core_outputs
+    if len(data.chatbot_text) != 0:
+        for i in data.chatbot_text:
+            _user, _content = i.split(":")
+            if _user != 'assistant':
+                inputs.append(_content)
+            else:
+                outputs.append(_content)
+    return inputs, outputs, core_inputs, core_outputs
 
 
 def get_tokenizer(questions, answers):

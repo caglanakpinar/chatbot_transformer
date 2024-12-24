@@ -22,8 +22,6 @@ def read_text(path):
     return [l.replace("\n", "") for l in lines if l != r'\n' and l.replace("\n", "") != ""]
 
 
-
-
 class Data:
     path_to_lines = Paths.parent_dir / "lines.txt"
     path_to_conversations = Paths.parent_dir / "text1.txt"

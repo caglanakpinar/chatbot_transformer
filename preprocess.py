@@ -62,14 +62,14 @@ def load_conversations(
 ):
     # dictionary of line id to text
     id2line = {}
-    with open(data.path_to_movie_lines, errors="ignore") as file:
+    with open(data.path_to_lines, errors="ignore") as file:
         lines = file.readlines()
     for line in lines:
         parts = line.replace("\n", "").split(" +++$+++ ")
         id2line[parts[0]] = parts[4]
 
     inputs, outputs = [], []
-    with open(data.path_to_movie_conversations, "r") as file:
+    with open(data.path_to_conversations, "r") as file:
         lines = file.readlines()
     for line in lines:
         parts = line.replace("\n", "").split(" +++$+++ ")

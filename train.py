@@ -1,5 +1,4 @@
 import tensorflow as tf
-from tensorflow.python.keras.utils.version_utils import callbacks
 
 from configs import Params
 from transformer import transformer
@@ -70,7 +69,6 @@ class Train:
         return  tf.keras.callbacks.ModelCheckpoint(
             filepath=str(Paths.parent_dir / "model.keras"),
             save_freq='epoch',
-            period=1
         )
 
     def build(self):

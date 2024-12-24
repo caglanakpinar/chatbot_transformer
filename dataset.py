@@ -4,6 +4,7 @@ import os
 import tensorflow as tf
 import pandas as pd
 import json
+import keras
 
 from configs import Params
 from utils import Paths
@@ -24,19 +25,8 @@ def read_text(path):
 
 
 class Data:
-    # open source data that are available on public at huggingface
-    path_to_zip = tf.keras.utils.get_file(
-        "cornell_movie_dialogs.zip",
-        origin="http://www.cs.cornell.edu/~cristian/data/cornell_movie_dialogs_corpus.zip",
-        extract=True,
-    )
-
-    path_to_dataset = os.path.join(
-        os.path.dirname(path_to_zip), "cornell movie-dialogs corpus"
-    )
-
-    path_to_movie_lines = os.path.join(path_to_dataset, "movie_lines.txt")
-    path_to_movie_conversations = os.path.join(path_to_dataset, "movie_conversations.txt")
+    path_to_lines = Paths.parent_dir / "lines.txt"
+    path_to_conversations = Paths.parent_dir / "text1.txt"
     text = json_read("text.txt")
     telecom_corpus = pd.read_parquet(
         "https://huggingface.co/api/datasets/talkmap/telecom-conversation-corpus/parquet/default/train/0.parquet"

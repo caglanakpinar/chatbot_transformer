@@ -3,7 +3,8 @@ import threading
 
 from flask import Flask, request
 import json
-
+import argparse
+from pathlib import Path
 
 from configs import Params
 from dataset import Data
@@ -11,6 +12,13 @@ from predict import Predict
 from preprocess import load_conversations, get_tokenizer
 from train import Train
 from utils import Paths
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-F','--additional_file_path', required=False, default=None)
+args = parser.parse_args()
+
+params = Params(trainer_config_path="hyper_params.yaml")
 
 
 class BaseServe:
@@ -26,6 +34,7 @@ class BaseServe:
         params = Params(trainer_config_path="hyper_params.yaml")
 
         data = Data()
+        data.read_additional_data(additional_file_path=args.additional_file_path)
         q, a, core_q, core_a = load_conversations(
             params,
             data
@@ -46,14 +55,19 @@ class BaseServe:
         print("training process will start ...")
         os.system("poetry run python3 main.py")
 
-    def read_write(self, files, date):
+    def read_write(self, files, date, additional_file_path=None):
         lines = []
         for f in files:
             with open(f, "r")as _f:
                 _data = _f.readlines()
             lines += _data
         _f.close()
-        with open(Paths.data_path / f"{date}.txt", "w") as file:
+        path = (
+            Path(additional_file_path)
+            if additional_file_path is not None
+            else Paths.data_path
+        )
+        with open(path / f"{date}.txt", "w") as file:
             for l in lines:
                 file.write('%s\n' % l)
         file.close()
@@ -81,7 +95,6 @@ class BaseServe:
 
         @app.route("/files")
         def get_files():
-            print("yesss")
             params = json.loads(request.data)
             thr = threading.Thread(target=read_write, daemon=True, kwargs=params)
             thr.daemon = True

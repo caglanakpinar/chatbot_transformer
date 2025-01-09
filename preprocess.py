@@ -91,11 +91,12 @@ def load_conversations(
                 outputs.append(l['content'])
     if len(data.chatbot_text) != 0:
         for i in data.chatbot_text:
-            _user, _content = i.split(":")
-            if _user != 'assistant':
-                inputs.append(_content)
-            else:
-                outputs.append(_content)
+            if len(i.split(":")) == 2:
+                _user, _content = i.split(":")
+                if _user != 'assistant':
+                    inputs.append(_content)
+                else:
+                    outputs.append(_content)
     return inputs, outputs, core_inputs, core_outputs
 
 

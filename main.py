@@ -3,10 +3,17 @@ from dataset import Data
 from predict import Predict
 from preprocess import load_conversations, get_tokenizer, tokenize_and_filter
 from train import Train
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-F','--additional_file_path', required=False, default=None)
+args = parser.parse_args()
 
 params = Params(trainer_config_path="hyper_params.yaml")
 
+
 data = Data()
+data.read_additional_data(additional_file_path=args.additional_file_path)
 q, a, core_a, core_q = load_conversations(
     params,
     data
